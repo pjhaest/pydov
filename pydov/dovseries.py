@@ -1,5 +1,3 @@
-
-
 import xmltodict
 import pandas as pd
 
@@ -8,21 +6,24 @@ class DOVVariableError(Exception):
     pass
 
 
-class DovGroundwater(object):
+namespaces = {"http://kern.schemas.dov.vlaanderen.be": 'kern'}
 
+
+class DovGroundwater(object):
     def __init__(self, xml_doc):
         with open(xml_doc) as fd:
-            doc = xmltodict.parse(fd.read())
+            doc = xmltodict.parse(fd.read(), process_namespaces=True,
+                                  namespaces=namespaces)
             self.peilmetingen = self._get_peilmetingen_df(doc)
             self.observaties = self._get_observaties_df(doc)
-            self.metadata_locatie = doc["ns2:dov-schema"]["grondwaterlocatie"]
+            self.metadata_locatie = doc["kern:dov-schema"]["grondwaterlocatie"]
             self.metadata_filters = self._get_filter_metadata(doc)
 
     @staticmethod
     def _get_filter_metadata(doc):
         """"""
         filter_info = {}
-        for filterd in doc["ns2:dov-schema"]['filter']:
+        for filterd in doc["kern:dov-schema"]['filter']:
             filter_info[filterd["identificatie"]] = filterd
         return filter_info
 
@@ -30,7 +31,7 @@ class DovGroundwater(object):
     def get_peilmetingen(doc):
         """Generator to extract the individual measurements from the XML
         export"""
-        for filterm in doc["ns2:dov-schema"]['filtermeting']:
+        for filterm in doc["kern:dov-schema"]['filtermeting']:
             for meting in filterm['peilmeting']:
                 yield (filterm['grondwaterlocatie'],
                        filterm['filter']['identificatie'],
@@ -57,7 +58,7 @@ class DovGroundwater(object):
     def get_observaties(doc):
         """Generator to extract the individual observations from the XML
         export"""
-        for filterm in doc["ns2:dov-schema"]['filtermeting']:
+        for filterm in doc["kern:dov-schema"]['filtermeting']:
             for watermonster in filterm['watermonster']:
                 for observatie in watermonster['observatie']:
                     yield (filterm['grondwaterlocatie'],
@@ -98,15 +99,13 @@ class DovGroundwater(object):
 
         vardata = self.observaties[self.observaties["parameter"] == variable]
         return vardata.pivot_table(
-                            index="datum",
-                            columns=["filternummer"],
-                            values="waarde")
+            index="datum",
+            columns=["filternummer"],
+            values="waarde")
 
     @property
     def peilmetingen_timeseries(self):
         return self.peilmetingen.reset_index().pivot_table(
-                            index="datum",
-                            columns=["grondwaterlocatie", "filternummer"],
-                            values="diepte")
-
-
+            index="datum",
+            columns=["grondwaterlocatie", "filternummer"],
+            values="diepte")
