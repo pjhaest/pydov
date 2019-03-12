@@ -4,7 +4,8 @@
 Accessing DOV data
 ==================
 
-DOV manages and publishes a lot of data about the soil, subsoil and groundwater of Flanders. Next to our userfriendly and easy-to-use `web applications <https://www.dov.vlaanderen.be/portaal>`_ like the 'DOV Verkenner', all of our data is also available in various publicly available services providing standards-based access to our content.
+DOV manages and publishes a lot of data about the soil, subsoil and groundwater of Flanders. Next to our userfriendly and easy-to-use `web applications <https://www.dov.vlaanderen.be/portaal>`_ like the 'DOV Verkenner', the data are also available in various publicly available services providing standards-based access to our content.
+Mind that not all data are publically available. This is discussed further below for access to raw data.
 
 This document describes the standards and endpoints we use so you'll be able to find the data you need and use it in your projects.
 
@@ -225,6 +226,8 @@ For some core feature types DOV has custom applications to enter, edit, import a
 Each feature of these feature types is uniquely and permanently identifiable by its URL starting with ``https://www.dov.vlaanderen.be/data/``. This URL resolves to an interactive HTML view of the feature. To obtain an XML representation of the same object according to the `DOV schema <https://www.dov.vlaanderen.be/xdov/schema/latest/xsd/kern/dov.xsd>`_\ , you can append ``.xml`` to the URL.
 
 For each of these feature types we also provide a map layer that contains all features and some key attributes, including the permanent URL described above. This allows using the map layer to search and identify features of interest (using the WFS service) and subsequently get their XML representation through the permanent URL.
+
+Mind that not all data are publically available due to confidentiallity issues. However, in the back all data are linked. It is therefore possible that one feature type suggest the presence of another feature type but that the latter is not available. E.g. a groundwater location without a borehole for filter 2005-007148. In this case a *null* value is returned to the user.
 
 A short overview of the map layers including permanent URL's can be found below. Please note that a detailed description of each dataset and its attributes can be found in our `metadata catalogue <https://www.dov.vlaanderen.be/geonetwork>`_\ , linked to in the first column:
 
