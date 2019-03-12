@@ -71,3 +71,5 @@ Background
     .. _Pandas package: https://pandas.pydata.org/
 
     As pydov relies on the XML data returned by the existing DOV webservices, downloads of these files can slow down the data retrieval. To mitigate this, pydov implementes some additional features that you can use to speed up your searches. Details are explained in the :ref:`performance guide <performance>`.
+
+    Mind that not all data are publically available. It is therefore possible that one feature type suggests the presence of another, but that pydov returns a *null* value. This *null* value indicates the confidentiality of the data. The user should contact the data supplier if the information is required.
